@@ -16,9 +16,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// ----------------------
 // Screen 1: Ignition System
-// ----------------------
 class IgnitionSystem extends StatefulWidget {
   const IgnitionSystem({super.key});
 
@@ -91,9 +89,7 @@ class _IgnitionSystemState extends State<IgnitionSystem> {
   }
 }
 
-// ----------------------
 // Screen 2: Launch Controller (Visual Countdown + LIFTOFF)
-// ----------------------
 class CounterWidget extends StatefulWidget {
   const CounterWidget({super.key});
 
