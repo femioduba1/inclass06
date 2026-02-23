@@ -61,7 +61,6 @@ class _IgnitionSystemState extends State<IgnitionSystem> {
               ),
             ),
             const SizedBox(height: 30),
-
             ElevatedButton(
               onPressed: toggleIgnition,
               style: ElevatedButton.styleFrom(
@@ -74,10 +73,7 @@ class _IgnitionSystemState extends State<IgnitionSystem> {
                 style: const TextStyle(fontSize: 18),
               ),
             ),
-
             const SizedBox(height: 20),
-
-            // Only allow moving forward if ignition is ON
             ElevatedButton(
               onPressed: ignitionOn ? goToController : null,
               child: const Text("Go to Launch Controller"),
@@ -89,7 +85,7 @@ class _IgnitionSystemState extends State<IgnitionSystem> {
   }
 }
 
-// Screen 2: Launch Controller (Visual Countdown + LIFTOFF)
+// Screen 2: Launch Controller
 class CounterWidget extends StatefulWidget {
   const CounterWidget({super.key});
 
@@ -100,10 +96,36 @@ class CounterWidget extends StatefulWidget {
 class _CounterWidgetState extends State<CounterWidget> {
   int _counter = 0;
 
+  // Visual Countdown Colors
   Color _getCounterColor() {
     if (_counter == 0) return Colors.red;
     if (_counter <= 50) return Colors.orange;
     return Colors.green; // 51-100
+  }
+
+  // Ignite (+1, max 100)
+  void _ignite() {
+    setState(() {
+      if (_counter < 100) {
+        _counter++;
+      }
+    });
+  }
+
+  // Decrement (-1, min 0)
+  void _decrement() {
+    setState(() {
+      if (_counter > 0) {
+        _counter--;
+      }
+    });
+  }
+
+  // Reset to 0
+  void _reset() {
+    setState(() {
+      _counter = 0;
+    });
   }
 
   @override
@@ -128,6 +150,8 @@ class _CounterWidgetState extends State<CounterWidget> {
               ),
             ),
           ),
+
+          // Slider
           Slider(
             min: 0,
             max: 100,
@@ -139,6 +163,38 @@ class _CounterWidgetState extends State<CounterWidget> {
             },
             activeColor: Colors.blue,
             inactiveColor: Colors.red,
+          ),
+
+          const SizedBox(height: 20),
+
+          // Buttons Row
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: _decrement,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange,
+                ),
+                child: const Text("Decrement"),
+              ),
+              const SizedBox(width: 15),
+              ElevatedButton(
+                onPressed: _ignite,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                ),
+                child: const Text("Ignite 🔥"),
+              ),
+              const SizedBox(width: 15),
+              ElevatedButton(
+                onPressed: _reset,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                ),
+                child: const Text("Reset"),
+              ),
+            ],
           ),
         ],
       ),
