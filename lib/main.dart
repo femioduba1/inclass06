@@ -2,41 +2,32 @@ import 'package:flutter/material.dart';
 
 void main() => runApp(const MyApp());
 
-class RocketApp extends StatelessWidget {
-  const RocketApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Rocket Launch Controller',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: CounterWidget(),
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: IgnitionSystem(),
     );
   }
 }
 
-class CounterWidget extends StatefulWidget {
+class IgnitionSystem extends StatefulWidget {
+  const IgnitionSystem({super.key});
+
   @override
-  _CounterWidgetState createState() => _CounterWidgetState();
+  State<IgnitionSystem> createState() => _IgnitionSystemState();
 }
 
-class _CounterWidgetState extends State<CounterWidget> {
+class _IgnitionSystemState extends State<IgnitionSystem> {
+  bool ignitionOn = false;
 
-  int _counter = 0;
-
-  // Visual Countdown Color Logic
-  Color _getCounterColor() {
-    if (_counter == 0) {
-      return Colors.red;
-    } else if (_counter <= 50) {
-      return Colors.orange;
-    } else if (_counter < 100) {
-      return Colors.green;
-    } else {
-      return Colors.green;
-    }
+  void toggleIgnition() {
+    setState(() {
+      ignitionOn = !ignitionOn;
+    });
   }
 
   @override
@@ -44,39 +35,36 @@ class _CounterWidgetState extends State<CounterWidget> {
     return Scaffold(
       backgroundColor: ignitionOn ? Colors.black : Colors.grey[300],
       appBar: AppBar(
-        title: const Text('Rocket Launch Controller'),
+        title: const Text("Rocket Ignition System"),
+        backgroundColor: ignitionOn ? Colors.red : Colors.blue,
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Center(
-            child: Container(
-              padding: const EdgeInsets.all(20),
-              child: Text(
-                // LIFTOFF Logic
-                _counter == 100 ? '🚀 LIFTOFF!' : '$_counter',
-                style: TextStyle(
-                  fontSize: 50.0,
-                  fontWeight: FontWeight.bold,
-                  color: _getCounterColor(),
-                ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              ignitionOn ? "IGNITION ACTIVE 🔥" : "Ignition OFF",
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: ignitionOn ? Colors.red : Colors.black,
               ),
             ),
-          ),
-
-          Slider(
-            min: 0,
-            max: 100,
-            value: _counter.toDouble(),
-            onChanged: (double value) {
-              setState(() {
-                _counter = value.toInt();
-              });
-            },
-            activeColor: Colors.blue,
-            inactiveColor: Colors.red,
-          ),
-        ],
+            const SizedBox(height: 30),
+            ElevatedButton(
+              onPressed: toggleIgnition,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: ignitionOn ? Colors.red : Colors.green,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+              ),
+              child: Text(
+                ignitionOn ? "Shut Down Ignition" : "Start Ignition",
+                style: const TextStyle(fontSize: 18),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
